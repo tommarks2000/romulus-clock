@@ -1,0 +1,11 @@
+render.yaml
+
+services:
+  - type: web
+    name: romulus-clock
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python romulus_clock.py
+    envVars:
+      - key: FLASK_ENV
+        value: production
