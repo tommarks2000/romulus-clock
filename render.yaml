@@ -2,8 +2,6 @@ services:
   - type: web
     name: romulus-clock
     env: python
+    plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: python romulus_clock.py
-    envVars:
-      - key: FLASK_ENV
-        value: production
+    startCommand: uvicorn romulus_clock:app --host 0.0.0.0 --port 8000
