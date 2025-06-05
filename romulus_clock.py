@@ -1,14 +1,26 @@
-# romulus_clock.py
+# main.py
 from fastapi import FastAPI
 from datetime import datetime
-import uvicorn
+import pytz
 
-app = FastAPI()
+app = FastAPI(
+    title="Romulus Clock",
+    description="Accurate UK Time API for Romulus & Kai agents",
+    version="1.0.0"
+)
 
 @app.get("/time")
 def get_time():
-    utc_now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-    return {"utc_time": utc_now}
+    uk_tz = pytz.timezone("Europe/London")
+    now = datetime.now(uk_tz)
+    return {
+        "time": now.strftime("%H:%M"),
+        "timestamp_iso": now.isoformat(),
+        "timezone": "Europe/London",
+        "utc_offset": now.strftime("%z"),
+        "is_dst": bool(now.dst())
+    }
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+@app.get("/health")
+def health():
+    return { "status": "healthy" }
